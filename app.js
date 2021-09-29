@@ -1,6 +1,6 @@
 // const { sequelize } = require('./models');
 // sequelize.sync({ force: true });
-
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const listRoute = require('./routes/listRoute');
@@ -31,4 +31,6 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message });
 });
 
-app.listen(8003, () => console.log('server running on port 8003'));
+const port = process.env.PORT || 8000;
+
+app.listen(port, () => console.log(`server running on port ${port}`));

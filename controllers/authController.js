@@ -17,7 +17,7 @@ exports.authenticate = async (req, res, next) => {
       return res.status(401).json({ message: 'you are unauthorized' });
     }
 
-    const decoded = jwt.verify(token, 'SECRET_KEY');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     // decoded { id: , email: , username }
 
     const user = await User.findOne({ where: { id: decoded.id } });
@@ -77,7 +77,7 @@ exports.login = async (req, res, next) => {
       username: user.username
     };
 
-    const token = jwt.sign(payload, 'SECRET_KEY', { expiresIn: 60 * 60 * 24 * 30 }); // '30d'
+    const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: 60 * 60 * 24 * 30 }); // '30d'
     res.json({ message: 'success logged in', token });
   } catch (err) {
     next(err);
