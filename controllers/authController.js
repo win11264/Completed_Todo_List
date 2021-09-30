@@ -1,6 +1,15 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
+const CustomError = require('../utils/error');
+
+// exports.checkRole = (...roles) => async (req,res,next) => {
+//   // ['ADMIN']          'CUSTOMER'
+//   if (!roles.includes(req.user.role)) {
+//     return res.status(403).json({message: 'you are not allowed'})
+//   }
+//   next()
+// }
 
 exports.authenticate = async (req, res, next) => {
   try {
@@ -40,7 +49,8 @@ exports.register = async (req, res, next) => {
 
     // check password match confirm password
     if (password !== confirmPassword) {
-      return res.status(400).json({ message: 'password and confirm password did not match' });
+      // return res.status(400).json({ message: 'password and confirm password did not match' });
+      throw new CustomError('password and confirm password did not match', 400);
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -77,7 +87,7 @@ exports.login = async (req, res, next) => {
       username: user.username
     };
 
-    const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: 60 * 60 * 24 * 30 }); // '30d'
+    const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: 5 }); // '30d'
     res.json({ message: 'success logged in', token });
   } catch (err) {
     next(err);
