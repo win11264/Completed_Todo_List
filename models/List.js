@@ -1,30 +1,32 @@
 module.exports = (sequelize, DataTypes) => {
   const List = sequelize.define(
-    'List',
+    "List",
     {
       title: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
       },
       status: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false
-      }
+        defaultValue: false,
+      },
+      imageUrl: DataTypes.STRING,
     },
+
     {
-      underscored: true
+      underscored: true,
     }
   );
 
-  List.associate = models => {
+  List.associate = (models) => {
     List.belongsTo(models.User, {
       foreignKey: {
-        name: 'userId',
-        allowNull: false
+        name: "userId",
+        allowNull: false,
       },
-      onDelete: 'RESTRICT',
-      onUpdate: 'RESTRICT'
+      onDelete: "RESTRICT",
+      onUpdate: "RESTRICT",
     });
   };
 
